@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from 'next/navigation';
+import ProtectedRoute from '../components/ProtecaoRota';
 import Sidebar from '../components/Sidebar';
 
 export default function Aprender() {
@@ -38,6 +39,7 @@ export default function Aprender() {
   ];
 
   return (
+    <ProtectedRoute>
     <div className="flex min-h-screen bg-white">
       <Sidebar />
       <div className="flex-1 p-6 ml-64 overflow-y-auto h-screen">
@@ -63,5 +65,6 @@ export default function Aprender() {
         </div>
       </div>
     </div>
+    </ProtectedRoute>
   );
 }

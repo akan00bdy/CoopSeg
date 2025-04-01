@@ -12,7 +12,6 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
     if (!token) {
       router.push("/login");
     } else {
-      // Simula tempo de validação (remova se usar validação de token real)
       setLoading(false);
     }
   }, [router]);

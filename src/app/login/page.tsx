@@ -8,6 +8,7 @@ export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,10 +22,10 @@ export default function LoginPage() {
     if (response.ok) {
       const data = await response.json();
       localStorage.setItem("token", data.backendTokens.accessToken);
-      alert("Login bem-sucedido!");
-      router.push("/news");
+      router.push("/aprender");
+      localStorage.setItem('userId', data.user.id);
     } else {
-      alert("Erro ao fazer login. Verifique suas credenciais.");
+      setError("Verifique suas crendenciais.");
     }
   };
 
@@ -57,6 +58,8 @@ export default function LoginPage() {
               required
             />
           </div>
+
+          {error && <p className="text-red-600 text-center">{error}</p>}
 
           <button type="submit" className="w-full flex items-center justify-center bg-green-600 text-white p-2 rounded hover:bg-green-700">
             <FaLock className="mr-2" /> Entrar

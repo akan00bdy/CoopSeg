@@ -47,9 +47,12 @@ export default function Quiz() {
               </div>
             </div>
 
-            <button className="w-full bg-green-500 text-white py-3 rounded-lg font-semibold hover:bg-green-600 transition">
-              Começar
-            </button>
+            <button
+            onClick={() => window.location.href = "/quiz/jogar/"}
+            className="w-full bg-green-500 text-white py-3 rounded-lg font-semibold hover:bg-green-600 transition"
+          >
+            Começar
+          </button>
 
             <p className="text-center text-gray-600 text-sm mt-4">
               Desafie-se com nosso teste de segurança e suba no ranking!

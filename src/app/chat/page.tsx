@@ -17,10 +17,11 @@ export default function ChatPage() {
   const [newMessage, setNewMessage] = useState('');
   const [username, setUsername] = useState('UsuarioName');
   const [loading, setLoading] = useState(false);
-
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+  
   const fetchMessages = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/chat/messages');
+      const response = await axios.get(`${API_URL}/chat/messages`);
       setMessages(response.data);
     } catch (error) {
       console.error('Erro ao buscar mensagens:', error);
@@ -32,7 +33,7 @@ export default function ChatPage() {
 
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:8000/chat/send', {
+      const response = await axios.post(`${API_URL}/chat/send`, {
         username,
         content: newMessage,
       });

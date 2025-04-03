@@ -13,7 +13,7 @@ export default function RegisterPage() {
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [ShowTermosModal, setShowTermosModal] = useState(false);
   const [ShowPrivadoModal, setShowPrivadoModal] = useState(false);
-
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,7 +28,7 @@ export default function RegisterPage() {
       return;
     }
 
-    const response = await fetch("http://localhost:8000/auth/register", {
+    const response = await fetch(`${API_URL}/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, email, password }),

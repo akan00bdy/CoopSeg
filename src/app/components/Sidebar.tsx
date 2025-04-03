@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react';
 
 export default function Sidebar() {
   const pathname = usePathname();
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const [user, setUser] = useState({ name: 'name', id: 'id' });
 
@@ -17,7 +17,7 @@ export default function Sidebar() {
         const userId = localStorage.getItem('userId');
 
         if (!userId) {
-          console.error('ID do usuário não encontrado');
+          console.log('ID do usuário não encontrado');
           return;
         }
 
@@ -35,7 +35,7 @@ export default function Sidebar() {
         const data = await response.json();
         setUser({ name: data.name, id: data.id });
       } catch (error) {
-        console.error('Erro ao buscar usuário:', error);
+        console.log('Erro ao buscar usuário:', error);
       }
     };
 

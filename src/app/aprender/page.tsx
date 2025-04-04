@@ -40,7 +40,7 @@ export default function Aprender() {
 
   return (
     <ProtectedRoute>
-    <div className="flex min-h-screen bg-white">
+    <div className="flex min-h-screen bg-[#E6F4EA]">
       <Sidebar />
       <div className="flex-1 p-6 ml-64 overflow-y-auto h-screen">
         <h1 className="text-2xl font-bold text-green-700 mb-10">Golpes mais comuns</h1>

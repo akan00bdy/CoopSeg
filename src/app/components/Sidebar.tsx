@@ -4,10 +4,32 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Newspaper, MessageSquare, BrainCircuit, GraduationCap } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import Image from 'next/image'
+
 
 export default function Sidebar() {
   const pathname = usePathname();
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
+  const router = useRouter();
+
+const Logout = async () => {
+    try {
+      await fetch(`${API_URL}/auth/logout`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+
+      localStorage.removeItem('token');
+      localStorage.clear();
+      router.push('/login');
+
+    } catch (error) {
+      console.error('Erro ao fazer logout:', error);
+    }
+  };
 
   const [user, setUser] = useState({ name: 'name', id: 'id' });
 
@@ -51,8 +73,12 @@ export default function Sidebar() {
 
   return (
     <div className="fixed top-0 left-0 h-screen w-64 bg-white shadow-md flex flex-col">
-      <div className="p-4">
-        <h1 className="text-2xl font-bold text-green-700">CoopSeg</h1>
+      <div className="p-5 text-2xl">
+        <Image 
+        src="/logocoopseg.png" 
+        alt="Logo CoopSeg"
+        width={150} 
+        height={50}></Image>
       </div>
 
       <nav className="flex-1 p-4">
@@ -83,6 +109,7 @@ export default function Sidebar() {
             <p className="text-green-700 font-medium">{user.name}</p>
             <p className="text-green-600 text-sm">#{user.id}</p>
           </div>
+          <button onClick={Logout} className='flex items-center p-2 ml-12 text-green-600 rounded-lg hover:bg-gray-200 transition-colors'>Sair</button>
         </div>
       </div>
     </div>

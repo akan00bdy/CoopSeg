@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "CoopSeg",
-  description: "Criado pelo GroupONE",
+  description: "Criado pelo grupoONE",
 };
 
 export default function RootLayout({

@@ -48,9 +48,8 @@ export default function GolpeDetalhes() {
           </button>
           <button
           onClick={() => window.history.back()}
-          className="bg-green-500 text-white font-medium py-2 px-6 rounded-lg hover:bg-green-600 transition-all"
+          className="bg-green-500 ml-2 text-white font-medium py-2 px-6 rounded-lg hover:bg-green-600 transition-all"
           >
-            
             Simular
           </button>
         </div>

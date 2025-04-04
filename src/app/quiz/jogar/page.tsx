@@ -133,6 +133,7 @@ export default function JogarQuiz() {
 
   const saveScoreToBackend = async (finalScore: number) => {
     const token = localStorage.getItem("token");
+    console.log(token)
     if (!token) {
       console.error("Token não encontrado! Usuário precisa estar autenticado.");
       return;
@@ -149,7 +150,7 @@ export default function JogarQuiz() {
       });
   
       if (!response.ok) {
-        throw new Error("Erro ao salvar pontuação");
+        console.log("Erro ao salvar pontuação");
       }
     } catch (error) {
       console.error("Erro ao salvar pontuação:", error);

@@ -21,7 +21,11 @@ export default function DashboardPage() {
           }`}
         >
           <div className="p-6 h-full flex flex-col overflow-y-auto">
-            <h1 className="text-2xl font-bold text-green-700 mb-4">
+            <h1
+              className={`text-2xl font-bold text-green-700 mb-10 transition-all duration-300 ease-in-out ${
+                isSidebarOpen ? 'ml-0' : 'ml-10'
+              }`}
+            >
               Golpes em números
             </h1>
 

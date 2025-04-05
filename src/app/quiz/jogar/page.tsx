@@ -24,6 +24,7 @@ export default function JogarQuiz() {
   const [timeLeft, setTimeLeft] = useState(30);
   const [quizFinished, setQuizFinished] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [streakCounter, setStreakCounter] = useState(0);
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
@@ -88,19 +89,29 @@ export default function JogarQuiz() {
   }, [currentQuestionIndex, score]);
 
   useEffect(() => {
-    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      if (!quizFinished) {
+    if (!quizFinished) {
+      const handleBeforeUnload = (event: BeforeUnloadEvent) => {
         event.preventDefault();
         event.returnValue = "Você perderá seu progresso se sair agora!";
-      }
-    };
-  
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+      };
+      window.addEventListener("beforeunload", handleBeforeUnload);
+      return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+    }
   }, [quizFinished]);
 
-  const calculateScore = (timeRemaining: number): number => {
-    return Math.round((timeRemaining / 30) * 100);
+  const calculateScore = (timeRemaining: number, streak: number): number => {
+    let baseScore = Math.round((timeRemaining / 30) * 100);
+    let multiplier = 1;
+
+    if (timeRemaining > 20) {
+      multiplier = 1.5;
+    } else if (timeRemaining > 10) {
+      multiplier = 1.25;
+    }
+
+    const streakBonus = streak >= 3 ? 10 : streak >= 5 ? 30 : 0;
+
+    return Math.round(baseScore * multiplier) + streakBonus;
   };
 
   const handleAnswer = (selectedOption: Option) => {
@@ -109,9 +120,12 @@ export default function JogarQuiz() {
       (op) => op.id === selectedOption.id
     )?.correctAnswer;
 
-    const points = isCorrect ? calculateScore(timeLeft) : 0;
+    let streak = isCorrect ? streakCounter + 1 : 0;
+    const points = isCorrect ? calculateScore(timeLeft, streak) : 0;
+
     if (isCorrect) {
       setScore((prev) => prev + points);
+      setStreakCounter(streak);
     }
     handleNextQuestion(points);
   };
@@ -137,22 +151,21 @@ export default function JogarQuiz() {
 
   const saveScoreToBackend = async (finalScore: number) => {
     const token = localStorage.getItem("token");
-    console.log(token)
     if (!token) {
       console.error("Token não encontrado! Usuário precisa estar autenticado.");
       return;
     }
-  
+
     try {
       const response = await fetch(`${API_URL}/quiz/score`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
+          "Authorization": `Bearer ${token}`,
         },
         body: JSON.stringify({ score: finalScore }),
       });
-  
+
       if (!response.ok) {
         console.log("Erro ao salvar pontuação");
       }
@@ -160,13 +173,18 @@ export default function JogarQuiz() {
       console.error("Erro ao salvar pontuação:", error);
     }
   };
-  
+
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
   if (loading) {
-    return <div>Carregando...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-200">
+        <span className="animate-spin h-10 w-10 border-4 border-t-blue-500 border-gray-300 rounded-full"></span>
+        <p className="ml-4 text-gray-700 text-lg">Carregando...</p>
+      </div>
+    );
   }
 
   if (quizFinished) {
@@ -175,14 +193,12 @@ export default function JogarQuiz() {
         <div className="flex min-h-screen bg-[#E6F4EA]">
           <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
           <main className="flex-1 p-6 flex items-center justify-center">
-            <div className="max-w-2xl w-full bg-white p-8 rounded-lg shadow-md text-center">
-              <h1 className="text-2xl font-bold text-gray-800 mb-4">
-                Quiz Finalizado!
-              </h1>
-              <p className="text-gray-600 mb-6">Sua pontuação: {score}</p>
+            <div className="max-w-2xl w-full bg-gradient-to-br from-green-400 to-green-500 p-8 rounded-lg shadow-md text-center text-white">
+              <h1 className="text-3xl font-bold mb-4">Quiz Finalizado!</h1>
+              <p className="text-lg mb-6">Sua pontuação: <span className="text-4xl font-extrabold">{score}</span></p>
               <a
                 href="/quiz"
-                className="bg-green-500 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-600 transition"
+                className="bg-green-700 py-3 px-6 rounded-lg font-semibold hover:bg-green-800 transition text-white"
               >
                 Voltar ao Ranking
               </a>
@@ -200,27 +216,31 @@ export default function JogarQuiz() {
       <div className="flex min-h-screen bg-[#E6F4EA]">
         <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
         <main className="flex-1 p-6 flex items-center justify-center">
-          <div className="max-w-2xl w-full bg-white p-8 rounded-lg shadow-md">
-            <div className="flex justify-between mb-4">
-              <p className="text-gray-600">
+          <div className="max-w-3xl w-full bg-white p-8 rounded-lg shadow-md">
+            <div className="relative mb-4">
+              <div className="h-2 bg-gray-300 rounded-full">
+                <div
+                  className="h-2 bg-green-500 rounded-full transition-all"
+                  style={{ width: `${((currentQuestionIndex + 1) / questions.length) * 100}%` }}
+                ></div>
+              </div>
+              <p className="text-right text-sm text-gray-600 mt-1">
                 Questão {currentQuestionIndex + 1} de {questions.length}
               </p>
-              <p className="text-gray-600">Tempo: {timeLeft}s</p>
             </div>
-            <h2 className="text-xl font-semibold text-gray-800 mb-6">
-              {currentQuestion.text}
-            </h2>
+            <h2 className="text-xl font-semibold text-gray-800 mb-6 text-center">{currentQuestion.text}</h2>
             <div className="space-y-4">
-              {currentQuestion.options.map((options, index) => (
+              {currentQuestion.options.map((option) => (
                 <button
-                  key={`${currentQuestion.id}-${index}`}
-                  onClick={() => handleAnswer(options)}
-                  className="w-full bg-gray-100 text-black py-3 rounded-lg hover:bg-gray-200 transition"
+                  key={option.id}
+                  onClick={() => handleAnswer(option)}
+                  className="w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition transform hover:scale-105 focus:outline-none shadow-md"
                 >
-                  {options.text}
+                  {option.text}
                 </button>
               ))}
             </div>
+            <p className="text-center text-gray-600 mt-6">Tempo restante: {timeLeft}s</p>
           </div>
         </main>
       </div>

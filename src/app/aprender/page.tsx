@@ -10,32 +10,28 @@ export default function Aprender() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const golpes = [
     {
-      title: 'Golpe do Pix errado',
-      description: 'Pediram pra devolver um pix que mandaram errado? Pode ser golpe!',
-      date: '20/01/2025',
+      title: 'Golpe do Link Falso',
+      description: "Recebeu um link pedindo pra devolver um PIX enviado por engano? Cuidado! Golpistas usam mensagens falsas pra enganar e roubar seu dinheiro.",
       category: 'Golpe do Pix errado',
-      slug: 'golpe-do-pix-errado',
+      slug: 'golpe-do-link-falso',
     },
     {
-      title: 'Golpe da falsa central de atendimento',
-      description: 'Ligaram dizendo que são do banco e pediram sua senha? Desliga, é golpe!',
-      date: '20/01/2025',
-      category: 'Golpe da falsa central de atendimento',
-      slug: 'golpe-da-falsa-central',
-    },
-    {
-      title: 'Golpe do falso motoboy',
-      description: 'Falaram que o motoboy do banco vai buscar seu cartão? Xi, é golpe!',
-      date: '20/01/2025',
+      title: 'Golpe de falsos anuncios',
+      description: 'Golpistas criam anúncios falsos em sites ou redes sociais oferecendo produtos irresistíveis a preços baixos. Após o pagamento, o produto nunca é entregue.',
       category: 'Golpe do falso motoboy',
-      slug: 'golpe-do-falso-motoboy',
+      slug: 'golpe-do-falso-anuncios',
     },
     {
-      title: 'Golpe da troca de cartão',
-      description: 'Confira se o cartão que o lojista devolveu é mesmo o seu. Não caia em golpe!',
-      date: '20/01/2025',
-      category: 'Golpe da troca de cartão',
-      slug: 'golpe-da-troca-de-cartao',
+      title: 'Golpe do WhatsApp Clonado',
+      description: 'Golpistas clonam seu número de WhatsApp e pedem dinheiro aos seus contatos, fingindo ser você em uma emergência.',
+      category: 'Golpe do WhatsApp Clonado',
+      slug: 'golpe-do-whatsapp-clonado',
+    },
+    {
+      title: 'Golpe do Falso Boleto',
+      description: 'Criminosos enviam boletos falsos por e-mail ou WhatsApp, simulando dívidas ou compras que você nunca fez. O pagamento vai direto para a conta dos golpistas.',
+      category: 'Golpe do Falso Boleto',
+      slug: 'golpe-do-falso-boleto',
     },
   ];
 
@@ -66,7 +62,6 @@ export default function Aprender() {
                 key={index}
                 className="bg-gray-100 text-black rounded-lg shadow-lg p-6 flex flex-col items-start"
               >
-                <p className="text-sm text-gray-600">{golpe.date}</p>
                 <h3 className="text-lg font-semibold mt-2">{golpe.title}</h3>
                 <p className="text-md text-gray-800 mt-2">{golpe.description}</p>
                 <button

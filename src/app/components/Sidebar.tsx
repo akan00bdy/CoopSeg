@@ -130,7 +130,6 @@ export default function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
         </div>
       </div>
 
-      {/* Botão de abrir sidebar (mobile) */}
       {!isOpen && (
         <button
           onClick={toggleSidebar}

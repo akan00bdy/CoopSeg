@@ -49,6 +49,12 @@ export default function ChatPage() {
 
   useEffect(() => {
     fetchMessages();
+  
+    const interval = setInterval(() => {
+      fetchMessages();
+    }, 2000);
+  
+    return () => clearInterval(interval);
   }, []);
 
   const toggleSidebar = () => {

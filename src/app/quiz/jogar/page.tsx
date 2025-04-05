@@ -89,12 +89,15 @@ export default function JogarQuiz() {
 
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      event.preventDefault();
-      event.returnValue = "Você perderá seu progresso se sair agora!";
+      if (!quizFinished) {
+        event.preventDefault();
+        event.returnValue = "Você perderá seu progresso se sair agora!";
+      }
     };
+  
     window.addEventListener("beforeunload", handleBeforeUnload);
     return () => window.removeEventListener("beforeunload", handleBeforeUnload);
-  }, []);
+  }, [quizFinished]);
 
   const calculateScore = (timeRemaining: number): number => {
     return Math.round((timeRemaining / 30) * 100);

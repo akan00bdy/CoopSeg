@@ -11,6 +11,7 @@ interface RankingEntry {
 }
 
 export default function Quiz() {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [ranking, setRanking] = useState<RankingEntry[]>([]);
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -36,10 +37,14 @@ export default function Quiz() {
     fetchRanking();
   }, [API_URL]);
 
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   return (
     <ProtectedRoute>
       <div className="flex min-h-screen bg-[#E6F4EA]">
-        <Sidebar />
+        <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
         <main className="flex-1 p-6 flex items-center justify-center">
           <div className="max-w-2xl w-full bg-white p-8 rounded-lg shadow-md">
             <h1 className="text-2xl font-bold text-gray-800 mb-2">

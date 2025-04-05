@@ -17,6 +17,7 @@ interface Question {
 }
 
 export default function JogarQuiz() {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
@@ -157,6 +158,9 @@ export default function JogarQuiz() {
     }
   };
   
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
 
   if (loading) {
     return <div>Carregando...</div>;
@@ -166,7 +170,7 @@ export default function JogarQuiz() {
     return (
       <ProtectedRoute>
         <div className="flex min-h-screen bg-[#E6F4EA]">
-          <Sidebar />
+          <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
           <main className="flex-1 p-6 flex items-center justify-center">
             <div className="max-w-2xl w-full bg-white p-8 rounded-lg shadow-md text-center">
               <h1 className="text-2xl font-bold text-gray-800 mb-4">
@@ -191,7 +195,7 @@ export default function JogarQuiz() {
   return (
     <ProtectedRoute>
       <div className="flex min-h-screen bg-[#E6F4EA]">
-        <Sidebar />
+        <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
         <main className="flex-1 p-6 flex items-center justify-center">
           <div className="max-w-2xl w-full bg-white p-8 rounded-lg shadow-md">
             <div className="flex justify-between mb-4">

@@ -17,8 +17,9 @@ export default function ChatPage() {
   const [newMessage, setNewMessage] = useState('');
   const [username, setUsername] = useState('UsuarioName');
   const [loading, setLoading] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
-  
+
   const fetchMessages = async () => {
     try {
       const response = await axios.get(`${API_URL}/chat/messages`);
@@ -50,12 +51,26 @@ export default function ChatPage() {
     fetchMessages();
   }, []);
 
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   return (
     <ProtectedRoute>
-          <div className="flex min-h-screen bg-green-50">
-            <Sidebar />
-            <div className="flex-1 p-6 ml-64 overflow-y-auto h-screen">
-          <h1 className="text-2xl font-bold text-green-700 mb-4">Chat</h1>
+      <div className="flex min-h-screen bg-green-50">
+        <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+        <div
+          className={`flex-1 p-6 overflow-y-auto h-screen transition-all duration-300 ease-in-out ${
+            isSidebarOpen ? 'ml-64' : 'ml-0'
+          }`}
+        >
+          <h1
+            className={`text-2xl font-bold text-green-700 mb-4 transition-all duration-300 ease-in-out ${
+              isSidebarOpen ? 'ml-0' : 'ml-10'
+            }`}
+          >
+            Chat
+          </h1>
 
           <div className="bg-white rounded-lg shadow-md p-4 h-96 overflow-y-auto mb-4">
             {messages.length === 0 ? (

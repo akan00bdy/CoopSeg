@@ -18,6 +18,7 @@ interface News {
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function NewsPage() {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [news, setNews] = useState<News[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -54,13 +55,25 @@ export default function NewsPage() {
         });
   };
 
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   return (
     <ProtectedRoute>
       <div className="flex min-h-screen bg-green-50">
-        <Sidebar />
-        <div className="flex-1 p-6 ml-64 overflow-y-auto h-screen">
-          <h1 className="text-2xl font-bold text-green-700 mb-4">
-            Notícias Recentes
+        <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+        <div
+          className={`flex-1 p-6 overflow-y-auto h-screen transition-all duration-300 ease-in-out ${
+            isSidebarOpen ? 'ml-64' : 'ml-0'
+          }`}
+        >
+          <h1
+            className={`text-2xl font-bold text-green-700 mb-10 transition-all duration-300 ease-in-out ${
+              isSidebarOpen ? 'ml-0' : 'ml-10'
+            }`}
+          >
+            Noticias mais comuns
           </h1>
           <p className="text-gray-600 mb-6">
             Mantenha-se informado sobre as últimas ameaças à segurança e medidas de proteção.
